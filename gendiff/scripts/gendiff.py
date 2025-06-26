@@ -1,15 +1,6 @@
 import argparse
 import json
 
-parser = argparse.ArgumentParser(
-    description='Compares two configuration files and shows a difference.'
-)
-parser.add_argument('first_file')
-parser.add_argument('second_file')
-parser.add_argument('-f', '-format', type=str, metavar='FORMAT',
-                    help='set format of output')
-args = parser.parse_args()
-
 
 def generate_diff(filepath1, filepath2):
     with open(filepath1, 'r', encoding='utf-8') as file:
@@ -25,8 +16,8 @@ def generate_diff(filepath1, filepath2):
             if key in json_file1 and json_file2[key] == json_file1[key]:
                 diff_result = diff_result + f'    {key}: {json_file2[key]}\n'
             elif key in json_file1 and json_file2[key] != json_file1[key]:
-                diff_result = diff_result + f'  - {key}: {json_file1[key]}\n + \
-                {key}: {json_file2[key]}\n'
+                diff_result = diff_result + \
+                f'  - {key}: {json_file1[key]}\n  + {key}: {json_file2[key]}\n'
         if key not in json_file2:
             diff_result = diff_result + f'  - {key}: {json_file1[key]}\n'
         if key not in json_file1:
@@ -40,6 +31,13 @@ def generate_diff(filepath1, filepath2):
 
 
 def main():
+    parser = argparse.ArgumentParser(
+    description='Compares two configuration files and shows a difference.')
+    parser.add_argument('first_file')
+    parser.add_argument('second_file')
+    parser.add_argument('-f', '-format', type=str, metavar='FORMAT',
+                    help='set format of output')
+    args = parser.parse_args()
     print("Lets's generete some difference!")
     diff = generate_diff(args.first_file, args.second_file)
     print(diff)
